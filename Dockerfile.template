@@ -1,0 +1,24 @@
+# Based on the *slim* Go 1.x image
+FROM resin/%%RESIN_MACHINE_NAME%%-golang:1-slim
+
+RUN apt-get update && apt-get install -yq \
+  build-essential scons swig && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /root
+COPY deps/ deps/
+COPY src/ /go/src/
+
+# Switch on systemd init system in container - allows improved resin.io management
+ENV INITSYSTEM on
+
+# Build/install the WS281x driver
+RUN cd deps/rpi_ws281x && scons
+
+# Copy the driver's wrapper, replacing its mock
+COPY deps/rpi_ws281x/golang/ws2811/ /go/src/ws2811/
+
+# Build and run Glowpher
+WORKDIR /go/src/glowpher/cmd/glowpher
+RUN go build
+CMD ./glowpher
