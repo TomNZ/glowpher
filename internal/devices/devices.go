@@ -1,9 +1,9 @@
 package devices
 
 type Device interface {
-	Setup(int)
-	ShowColors([]uint32)
-	Clear()
+	Setup(int) error
+	ShowColors([]uint32) error
+	Clear() error
 	Teardown()
 }
 

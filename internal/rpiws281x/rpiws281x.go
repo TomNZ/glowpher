@@ -18,7 +18,7 @@ type WS281x struct {
 	strip *C.ws2811_t
 }
 
-func (w *WS281x) Setup(numLights int) {
+func (w *WS281x) Setup(numLights int) error {
 	C.ledstring.channel[0].gpionum = C.int(18)
 	C.ledstring.channel[0].count = C.int(numLights)
 	C.ledstring.channel[0].brightness = C.uint8_t(255)
@@ -30,7 +30,7 @@ func (w *WS281x) Setup(numLights int) {
 	}
 }
 
-func (w *WS281x) ShowColors(colors []uint32) {
+func (w *WS281x) ShowColors(colors []uint32) error {
 	// Two-phase - set the colors, then render them
 	C.ws2811_set_bitmap(&C.ledstring, unsafe.Pointer(&colors[0]), C.int(len(colors)*4))
 
@@ -42,8 +42,9 @@ func (w *WS281x) ShowColors(colors []uint32) {
 	}
 }
 
-func (w *WS281x) Clear() {
+func (w *WS281x) Clear() error {
 	C.ws2811_clear(&C.ledstring)
+	return nil
 }
 
 func (w *WS281x) Teardown() {
