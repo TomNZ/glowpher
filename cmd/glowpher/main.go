@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 
 	"github.com/tomnz/glowpher/internal/devices"
 )
@@ -12,8 +13,16 @@ func main() {
 	device.Setup(10)
 	for {
 		device.ShowColors([]uint32{
-			1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
+			rand.Uint32(),
 		})
-		device.Clear()
 	}
 }
