@@ -27,6 +27,7 @@ func main() {
 				rand.Uint32(),
 				rand.Uint32(),
 			})
+			i++
 		} else {
 			time.Sleep(time.Second * 10)
 			i = 0
