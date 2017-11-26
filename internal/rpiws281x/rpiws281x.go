@@ -48,7 +48,7 @@ func (w *WS281x) render() error {
 	} else {
 		return errors.New(fmt.Sprintf("Error ws2811.render.%d", res))
 	}
-	res := int(C.ws2811_wait(&C.ledstring))
+	res = int(C.ws2811_wait(&C.ledstring))
 	if res == 0 {
 		return nil
 	} else {
