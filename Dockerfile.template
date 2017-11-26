@@ -13,8 +13,9 @@ WORKDIR /root
 RUN git clone https://github.com/jgarff/rpi_ws281x.git
 WORKDIR /root/rpi_ws281x
 RUN scons
-RUN ln -s *.h /usr/include
-RUN ln -s *.a /usr/lib
+# Ghetto "install"
+RUN cp *.h /usr/include
+RUN cp *.a /usr/lib
 RUN cp -R golang/ws2811 /go/src/ws2811
 
 # Build and run Glowpher
