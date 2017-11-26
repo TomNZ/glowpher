@@ -33,18 +33,21 @@ func (w *WS281x) Setup(numLights int) error {
 func (w *WS281x) ShowColors(colors []uint32) error {
 	// Two-phase - set the colors, then render them
 	C.ws2811_set_bitmap(&C.ledstring, unsafe.Pointer(&colors[0]), C.int(len(colors)*4))
+	return w.render()
+}
 
+func (w *WS281x) Clear() error {
+	C.ws2811_clear(&C.ledstring)
+	return w.render()
+}
+
+func (w *WS281x) render() error {
 	res := int(C.ws2811_render(&C.ledstring))
 	if res == 0 {
 		return nil
 	} else {
 		return errors.New(fmt.Sprintf("Error ws2811.render.%d", res))
 	}
-}
-
-func (w *WS281x) Clear() error {
-	C.ws2811_clear(&C.ledstring)
-	return nil
 }
 
 func (w *WS281x) Teardown() {
