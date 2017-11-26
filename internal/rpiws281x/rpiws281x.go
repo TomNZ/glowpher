@@ -14,10 +14,15 @@ import (
 	"unsafe"
 )
 
-func Init(gpioPin int, ledCount int, brightness int) error {
-	C.ledstring.channel[0].gpionum = C.int(gpioPin)
-	C.ledstring.channel[0].count = C.int(ledCount)
-	C.ledstring.channel[0].brightness = C.uint8_t(brightness)
+type WS281x struct {
+	strip *C.ws2811_t
+}
+
+func (w *WS281x) Setup(numLights int) {
+	w.strip = 
+	C.ledstring.channel[0].gpionum = C.int(18)
+	C.ledstring.channel[0].count = C.int(numLights)
+	C.ledstring.channel[0].brightness = C.uint8_t(255)
 	res := int(C.ws2811_init(&C.ledstring))
 	if res == 0 {
 		return nil
@@ -26,11 +31,10 @@ func Init(gpioPin int, ledCount int, brightness int) error {
 	}
 }
 
-func Fini() {
-	C.ws2811_fini(&C.ledstring)
-}
+func (w *WS281x) ShowColors(colors []uint32) {
+	// Two-phase - set the colors, then render them
+	C.ws2811_set_bitmap(&C.ledstring, unsafe.Pointer(&colors[0]), C.int(len(colors)*4))
 
-func Render() error {
 	res := int(C.ws2811_render(&C.ledstring))
 	if res == 0 {
 		return nil
@@ -39,23 +43,10 @@ func Render() error {
 	}
 }
 
-func Wait() error {
-	res := int(C.ws2811_wait(&C.ledstring))
-	if res == 0 {
-		return nil
-	} else {
-		return errors.New(fmt.Sprintf("Error ws2811.wait.%d", res))
-	}
-}
-
-func SetLed(index int, value uint32) {
-	C.ws2811_set_led(&C.ledstring, C.int(index), C.uint32_t(value))
-}
-
-func Clear() {
+func (w *WS281x) Clear() {
 	C.ws2811_clear(&C.ledstring)
 }
 
-func SetBitmap(a []uint32) {
-	C.ws2811_set_bitmap(&C.ledstring, unsafe.Pointer(&a[0]), C.int(len(a)*4))
+func (w *WS281x) Teardown() {
+	C.ws2811_fini(&C.ledstring)
 }

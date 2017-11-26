@@ -3,21 +3,21 @@
 #include <ws2811.h>
 
 ws2811_t ledstring = {
-   .freq = 800000,
-   .dmanum = 5,
-   .channel = {
-	   [0] = {
-		   .gpionum = 18,
-		   .count = 256,
-		   .invert = 0,
-		   .brightness = 32,
-	   },
-	   [1] = {
-		   .gpionum = 0,
-		   .count = 0,
-		   .invert = 0,
-		   .brightness = 0,
-	   },
+    .freq = 800000,
+    .dmanum = 5,
+    .channel = {
+        [0] = {
+            .gpionum = 18,
+            .count = 256,
+            .invert = 0,
+            .brightness = 32,
+        },
+        [1] = {
+            .gpionum = 0,
+            .count = 0,
+            .invert = 0,
+            .brightness = 0,
+        },
    },
 };
 

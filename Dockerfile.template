@@ -21,5 +21,5 @@ RUN cp *.a /usr/lib
 COPY . /go/src/github.com/tomnz/glowpher/
 
 WORKDIR /go/src/github.com/tomnz/glowpher/cmd/glowpher
-RUN go build -tags 'rpiws281x'
+RUN go build -tags=rpiws281x
 CMD ./glowpher

@@ -4,16 +4,18 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tomnz/glowpher/internal/rpiws281x"
+	"github.com/tomnz/glowpher/internal/devices"
 )
 
 func main() {
 	fmt.Println("hello world!")
-	rpiws281x.Init(18, 10, 255)
-	rpiws281x.SetBitmap([]uint32{
+	device := devices.Registry["ws281x"]
+	device.Setup(10)
+	device.ShowColors([]uint32{
 		1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,
 	})
-	rpiws281x.Render()
 	time.Sleep(time.Second * 5)
-	rpiws281x.Fini()
+	device.Clear()
+	time.Sleep(time.Second * 1)
+	device.Teardown()
 }

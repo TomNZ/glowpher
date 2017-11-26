@@ -1,3 +1,1 @@
-/deps/rpi_ws281x/DEBIAN
-/deps/rpi_ws281x/python
-/src/ws2811
+**/*.md
