@@ -10,17 +10,16 @@ ENV INITSYSTEM on
 
 # Pull and build the ws281x dep
 WORKDIR /root
-RUN git clone https://github.com/jgarff/rpi_ws281x.git
+RUN git clone https://github.com/jgarff/rpi_ws281x.git --depth=1
 WORKDIR /root/rpi_ws281x
 RUN scons
 # Ghetto "install"
 RUN cp *.h /usr/include
 RUN cp *.a /usr/lib
-RUN cp -R golang/ws2811 /go/src/ws2811
 
 # Build and run Glowpher
 COPY . /go/src/github.com/tomnz/glowpher/
 
 WORKDIR /go/src/github.com/tomnz/glowpher/cmd/glowpher
-RUN go build
+RUN go build -tags=rpiws281x
 CMD ./glowpher
