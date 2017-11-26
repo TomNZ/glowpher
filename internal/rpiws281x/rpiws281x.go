@@ -19,7 +19,6 @@ type WS281x struct {
 }
 
 func (w *WS281x) Setup(numLights int) {
-	w.strip = 
 	C.ledstring.channel[0].gpionum = C.int(18)
 	C.ledstring.channel[0].count = C.int(numLights)
 	C.ledstring.channel[0].brightness = C.uint8_t(255)
