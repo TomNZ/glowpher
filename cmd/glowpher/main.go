@@ -10,7 +10,7 @@ import (
 func main() {
 	log.Println("Listening...")
 	handler := server.NewHandler()
-	if err := http.ListenAndServe("localhost:80", handler); err != nil {
+	if err := http.ListenAndServe("0.0.0.0:80", handler); err != nil {
 		log.Fatal(err)
 	}
 }
