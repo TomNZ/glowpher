@@ -1,17 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"log"
+	"net/http"
 
-	"github.com/tomnz/glowpher/internal/devices"
+	"github.com/tomnz/glowpher/server"
 )
 
 func main() {
-	fmt.Println("hello world!")
-	device := devices.Registry["ws281x"]
-	device.Setup(10)
-	for {
-		time.Sleep(time.Second * 10)
+	log.Println("Listening...")
+	handler := server.NewHandler()
+	if err := http.ListenAndServe("localhost:80", handler); err != nil {
+		log.Fatal(err)
 	}
 }
