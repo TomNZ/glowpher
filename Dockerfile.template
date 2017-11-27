@@ -17,9 +17,13 @@ RUN scons
 RUN cp *.h /usr/include
 RUN cp *.a /usr/lib
 
-# Build and run Glowpher
 COPY . /go/src/github.com/tomnz/glowpher/
-
 WORKDIR /go/src/github.com/tomnz/glowpher/cmd/glowpher
+
+# Install dependencies
+RUN go get -u github.com/golang/dep/...
+RUN dep ensure
+
+# Build and run glowpher
 RUN go build -tags=rpiws281x
 CMD ./glowpher
