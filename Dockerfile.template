@@ -24,6 +24,6 @@ WORKDIR /go/src/github.com/tomnz/glowpher/cmd/glowpher
 RUN go get -u github.com/golang/dep/...
 RUN dep ensure
 
-# Build and run glowpher
+# Build and run Glowpher
 RUN go build -tags=rpiws281x
 CMD ./glowpher
