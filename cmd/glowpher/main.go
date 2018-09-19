@@ -1,16 +1,31 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
-	"net/http"
 
-	"github.com/tomnz/glowpher/server"
+	"github.com/k0kubun/pp"
+	"github.com/tomnz/glowpher/config"
+	"github.com/tomnz/glowpher/internal/playlist"
 )
 
 func main() {
-	log.Println("Listening...")
-	handler := server.NewHandler()
-	if err := http.ListenAndServe("0.0.0.0:80", handler); err != nil {
+	var cfg config.Config
+
+	configFile, err := ioutil.ReadFile("config.json")
+	if err != nil {
 		log.Fatal(err)
 	}
+
+	if err := json.Unmarshal(configFile, &cfg); err != nil {
+		log.Fatalf("couldn't read config: %s", err)
+	}
+
+	pl, err := playlist.Compile(cfg)
+	if err != nil {
+		log.Fatalf("couldn't compile playlist: %s", err)
+	}
+
+	pp.Print(pl)
 }

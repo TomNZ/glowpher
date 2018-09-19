@@ -1,0 +1,31 @@
+{
+    "playlist": {
+        "scenes": [
+            {
+                "name": "Christmas!",
+                "effects": [
+                    {
+                        "type": "brightness",
+                        "params": {
+                            "value": {
+                                "type": "float",
+                                "value": {
+                                    "float": 0.5
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        "defaultDuration": "30s"
+    },
+    "variables": [
+        {
+            "name": "Random 1",
+            "type": "random",
+            "params": {}
+        }
+    ]
+        
+}
