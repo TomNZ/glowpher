@@ -17,6 +17,10 @@ func (r *Random) Type() string {
 	return randomType
 }
 
+func (r *Random) DefaultParams() map[string]Param {
+	return map[string]Param{}
+}
+
 // New returns a new instance of the variable.
 func (r *Random) New(name string, params map[string]Param) (Variable, error) {
 	if r.concrete {

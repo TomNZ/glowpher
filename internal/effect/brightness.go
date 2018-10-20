@@ -12,6 +12,10 @@ func (b *Brightness) Type() string {
 	return brightnessType
 }
 
+func (b *Brightness) DefaultParams() map[string]variable.Param {
+	return map[string]variable.Param{}
+}
+
 func (b *Brightness) New(params map[string]variable.Param) (Effect, error) {
 	b2 := Brightness(*b)
 	b2.concrete = true

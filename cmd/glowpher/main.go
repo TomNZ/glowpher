@@ -2,13 +2,16 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
-	"log"
-
 	"github.com/k0kubun/pp"
 	"github.com/tomnz/glowpher/config"
+	"github.com/tomnz/glowpher/internal/devices"
 	"github.com/tomnz/glowpher/internal/playlist"
+	"io/ioutil"
+	"log"
+	"math/rand"
 )
+
+const pixels = 52
 
 func main() {
 	var cfg config.Config
@@ -28,4 +31,17 @@ func main() {
 	}
 
 	pp.Print(pl)
+
+	dev := devices.Registry["ws281x"]
+	dev.Setup(pixels)
+
+	colors := make([]uint32, pixels)
+
+	for {
+		for idx := range colors {
+			colors[idx] = rand.Uint32()
+		}
+		dev.ShowColors(colors)
+		//time.Sleep(time.Millisecond * 500)
+	}
 }

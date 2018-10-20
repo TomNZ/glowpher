@@ -7,6 +7,8 @@ type Effect interface {
 	Type() string
 	Concrete() bool
 	Params() map[string]variable.Param
+	DefaultParams() map[string]variable.Param
+
 	New(params map[string]variable.Param) (Effect, error)
 }
 
@@ -20,6 +22,9 @@ func (e *effect) Concrete() bool {
 }
 
 func (e *effect) Params() map[string]variable.Param {
+	if !e.Concrete() {
+		panic("cannot get prams for uninitialized effect")
+	}
 	return e.params
 }
 

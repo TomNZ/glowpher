@@ -6,6 +6,8 @@ type Variable interface {
 	Type() string
 	Name() string
 	Params() map[string]Param
+	DefaultParams() map[string]Param
+
 	New(name string, params map[string]Param) (Variable, error)
 }
 
@@ -30,6 +32,9 @@ func (v *variable) Name() string {
 }
 
 func (v *variable) Params() map[string]Param {
+	if !v.Concrete() {
+		panic("cannot get params for uninitialized variable")
+	}
 	return v.params
 }
 

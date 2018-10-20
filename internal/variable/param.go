@@ -10,7 +10,19 @@ type Param interface{}
 
 type ParamVariable interface {
 	Param
+	Variable() Variable
 	WireVariable(variables map[string]Variable) error
+}
+
+type ParamString interface {
+	Param
+	Value() string
+}
+
+type ParamStringLiteral string
+
+func (s ParamStringLiteral) Value() string {
+	return string(s)
 }
 
 type ParamInt interface {
@@ -36,6 +48,10 @@ func NewParamIntVariable(varName string, multiply, add float32) *ParamIntVariabl
 		multiply: multiply,
 		add:      add,
 	}
+}
+
+func (i *ParamIntVariable) Variable() Variable {
+	return i.variable
 }
 
 func (i *ParamIntVariable) WireVariable(variables map[string]Variable) error {
@@ -80,6 +96,11 @@ func NewParamFloatVariable(varName string, multiply, add float32) *ParamFloatVar
 		add:      add,
 	}
 }
+
+func (f *ParamFloatVariable) Variable() Variable {
+	return f.variable
+}
+
 func (f *ParamFloatVariable) WireVariable(variables map[string]Variable) error {
 	vari, found := variables[f.varName]
 	if !found {

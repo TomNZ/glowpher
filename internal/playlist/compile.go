@@ -80,7 +80,7 @@ func compileParams(cfg map[string]config.Param) (map[string]variable.Param, erro
 				if cfgParam.Value.String == nil {
 					return nil, fmt.Errorf("param %q must define a string value", name)
 				}
-				params[name] = variable.StringLiteral(*cfgParam.Value.String)
+				params[name] = variable.ParamStringLiteral(*cfgParam.Value.String)
 
 			case config.ParamIntType:
 				if cfgParam.Value.Int == nil {

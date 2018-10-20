@@ -2,14 +2,38 @@
 
 
 [[projects]]
+  name = "github.com/k0kubun/pp"
+  packages = ["."]
+  revision = "027a6d1765d673d337e687394dbe780dd64e2a1e"
+  version = "v2.3.0"
+
+[[projects]]
+  name = "github.com/mattn/go-colorable"
+  packages = ["."]
+  revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
+  version = "v0.0.9"
+
+[[projects]]
+  name = "github.com/mattn/go-isatty"
+  packages = ["."]
+  revision = "6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c"
+  version = "v0.0.4"
+
+[[projects]]
   name = "goji.io"
-  packages = [".","internal"]
+  packages = [".","internal","pat","pattern"]
   revision = "0d89ff54b2c18c9c4ba530e32496aef902d3c6cd"
   version = "v2.0"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "8e24a49d80f82323e1c4db1b5da3e0f31171a151"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "dcd06992b5e23e54d9543c4fe2ece13e2bcf39f223d871eea02f27e3b25b5edb"
+  inputs-digest = "83d052b94f9afa0754944a673dd4cefb63cbe4b30ab80456dd0dbfd40162d313"
   solver-name = "gps-cdcl"
   solver-version = 1
