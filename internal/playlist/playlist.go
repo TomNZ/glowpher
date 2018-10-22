@@ -1,6 +1,7 @@
 package playlist
 
 import (
+	"github.com/tomnz/glowpher/internal/variable"
 	"time"
 
 	"github.com/tomnz/glowpher/internal/effect"
@@ -8,6 +9,7 @@ import (
 
 type Playlist struct {
 	scenes          []*Scene
+	variables       map[string]variable.Variable
 	defaultDuration time.Duration
 }
 

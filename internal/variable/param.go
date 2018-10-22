@@ -72,6 +72,14 @@ func (i *ParamIntVariable) Value() int {
 	return int(i.variable.Value()*i.multiply + i.add)
 }
 
+func (i *ParamIntVariable) Multiply() float32 {
+	return i.multiply
+}
+
+func (i *ParamIntVariable) Add() float32 {
+	return i.add
+}
+
 type ParamFloat interface {
 	Param
 	Value() float32
@@ -117,6 +125,14 @@ func (f *ParamFloatVariable) WireVariable(variables map[string]Variable) error {
 
 func (f *ParamFloatVariable) Value() float32 {
 	return f.variable.Value()*f.multiply + f.add
+}
+
+func (f *ParamFloatVariable) Multiply() float32 {
+	return f.multiply
+}
+
+func (f *ParamFloatVariable) Add() float32 {
+	return f.add
 }
 
 type ParamColor interface {

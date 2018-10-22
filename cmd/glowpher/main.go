@@ -25,12 +25,22 @@ func main() {
 		log.Fatalf("couldn't read config: %s", err)
 	}
 
+	pp.Print(cfg)
+	println()
+	println()
+
 	pl, err := playlist.Compile(cfg)
 	if err != nil {
 		log.Fatalf("couldn't compile playlist: %s", err)
 	}
 
 	pp.Print(pl)
+	println()
+	println()
+
+	cfgApi := playlist.Decompile(pl)
+
+	pp.Print(cfgApi)
 
 	dev := devices.Registry["ws281x"]
 	dev.Setup(pixels)

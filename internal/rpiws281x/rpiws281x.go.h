@@ -4,7 +4,7 @@
 
 ws2811_t ledstring = {
     .freq = 800000,
-    .dmanum = 5,
+    .dmanum = 10,
     .channel = {
         [0] = {
             .gpionum = 18,

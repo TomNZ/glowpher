@@ -42,6 +42,7 @@ func Compile(cfg config.Config) (*Playlist, error) {
 
 	return &Playlist{
 		scenes:          scenes,
+		variables:       variables,
 		defaultDuration: defaultDuration,
 	}, nil
 }
