@@ -52,6 +52,6 @@ func main() {
 			colors[idx] = rand.Uint32()
 		}
 		dev.ShowColors(colors)
-		//time.Sleep(time.Millisecond * 500)
+		time.Sleep(time.Millisecond * 500)
 	}
 }
