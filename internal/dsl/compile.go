@@ -32,7 +32,7 @@ func Compile(cfg config.Config) (*Config, error) {
 		if err != nil {
 			return nil, err
 		}
-		scenes[scene.name] = scene
+		scenes[scene.Name] = scene
 	}
 
 	playlists := make(map[string]*Playlist, len(cfg.Playlists))
@@ -45,9 +45,9 @@ func Compile(cfg config.Config) (*Config, error) {
 	}
 
 	return &Config{
-		scenes:    scenes,
-		variables: variables,
-		playlists: playlists,
+		Scenes:    scenes,
+		Variables: variables,
+		Playlists: playlists,
 	}, nil
 }
 
@@ -166,15 +166,15 @@ func compileScene(cfg config.Scene, variables map[string]variable.Variable) (*Sc
 	}
 
 	return &Scene{
-		name:    cfg.Name,
-		effects: effects,
+		Name:    cfg.Name,
+		Effects: effects,
 	}, nil
 }
 
 func compilePlaylist(cfg config.Playlist, scenes map[string]*Scene) (*Playlist, error) {
 	defaultDuration, err := compileDuration(&cfg.DefaultDuration)
 	if err != nil {
-		return nil, fmt.Errorf("dsl %q has default duration %q: %s", cfg.DefaultDuration, err)
+		return nil, fmt.Errorf("dsl %q has default Duration %q: %s", cfg.DefaultDuration, err)
 	}
 
 	playlistScenes := make([]PlaylistScene, len(cfg.Scenes))
@@ -185,18 +185,19 @@ func compilePlaylist(cfg config.Playlist, scenes map[string]*Scene) (*Playlist, 
 
 		duration, err := compileDuration(cfgScene.Duration)
 		if err != nil {
-			return nil, fmt.Errorf("dsl %q scene %q has invalid duration %q: %s", cfg.Name, cfgScene.Name, cfgScene.Duration, err)
+			return nil, fmt.Errorf("dsl %q scene %q has invalid Duration %q: %s", cfg.Name, cfgScene.Name, cfgScene.Duration, err)
 		}
 
 		playlistScenes[idx] = PlaylistScene{
-			name:     cfgScene.Name,
-			duration: duration,
+			Name:     cfgScene.Name,
+			Duration: duration,
 		}
 	}
 
 	return &Playlist{
-		scenes:          playlistScenes,
-		defaultDuration: defaultDuration,
+		Name:            cfg.Name,
+		Scenes:          playlistScenes,
+		DefaultDuration: defaultDuration,
 	}, nil
 }
 

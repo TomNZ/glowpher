@@ -12,6 +12,8 @@ import (
 	"errors"
 	"fmt"
 	"unsafe"
+
+	"github.com/tomnz/glowpher/internal/color"
 )
 
 type WS281x struct {
@@ -30,9 +32,13 @@ func (w *WS281x) Setup(numLights int) error {
 	}
 }
 
-func (w *WS281x) ShowColors(colors []uint32) error {
+func (w *WS281x) ShowColors(colors []color.Color) error {
+	colorInts := make([]uint32, len(colors))
+	for idx := range colors {
+		colorInts[idx] = colors[idx].Uint32()
+	}
 	// Two-phase - set the colors, then render them
-	C.ws2811_set_bitmap(&C.ledstring, unsafe.Pointer(&colors[0]), C.int(len(colors)*4))
+	C.ws2811_set_bitmap(&C.ledstring, unsafe.Pointer(&colorInts[0]), C.int(len(colors)*4))
 	return w.render()
 }
 

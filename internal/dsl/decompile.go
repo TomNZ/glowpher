@@ -35,10 +35,10 @@ func Decompile(cfg *Config) *config.API {
 		idx++
 	}
 
-	// Build variables
-	vars := make([]config.Variable, len(cfg.variables))
+	// Build Variables
+	vars := make([]config.Variable, len(cfg.Variables))
 	idx = 0
-	for name, vari := range cfg.variables {
+	for name, vari := range cfg.Variables {
 		vars[idx] = config.Variable{
 			Name:   name,
 			Type:   vari.Type(),
@@ -48,10 +48,10 @@ func Decompile(cfg *Config) *config.API {
 	}
 	api.Config.Variables = vars
 
-	// Build scenes
-	scenes := make([]config.Scene, len(cfg.scenes))
+	// Build Scenes
+	scenes := make([]config.Scene, len(cfg.Scenes))
 	idx = 0
-	for _, scene := range cfg.scenes {
+	for _, scene := range cfg.Scenes {
 		scenes[idx] = decompileScene(scene)
 		idx++
 	}
@@ -60,10 +60,10 @@ func Decompile(cfg *Config) *config.API {
 	})
 	api.Config.Scenes = scenes
 
-	// Build playlists
-	playlists := make([]config.Playlist, len(cfg.playlists))
+	// Build Playlists
+	playlists := make([]config.Playlist, len(cfg.Playlists))
 	idx = 0
-	for _, playlist := range cfg.playlists {
+	for _, playlist := range cfg.Playlists {
 		playlists[idx] = decompilePlaylist(playlist)
 		idx++
 	}
@@ -150,13 +150,13 @@ func decompileParams(params map[string]variable.Param) map[string]config.Param {
 }
 
 func decompileScene(scene *Scene) config.Scene {
-	effects := make([]config.SceneEffect, len(scene.effects))
+	effects := make([]config.SceneEffect, len(scene.Effects))
 	for idx := range effects {
-		effects[idx] = decompileEffect(scene.effects[idx])
+		effects[idx] = decompileEffect(scene.Effects[idx])
 	}
 
 	return config.Scene{
-		Name:    scene.name,
+		Name:    scene.Name,
 		Effects: effects,
 	}
 }
@@ -169,24 +169,24 @@ func decompileEffect(eff effect.Effect) config.SceneEffect {
 }
 
 func decompilePlaylist(playlist *Playlist) config.Playlist {
-	scenes := make([]config.PlaylistScene, len(playlist.scenes))
-	for idx, scene := range playlist.scenes {
+	scenes := make([]config.PlaylistScene, len(playlist.Scenes))
+	for idx, scene := range playlist.Scenes {
 		var duration *string
-		if scene.duration != 0 {
-			durationStr := scene.duration.String()
+		if scene.Duration != 0 {
+			durationStr := scene.Duration.String()
 			duration = &durationStr
 		}
 
 		scenes[idx] = config.PlaylistScene{
-			Name:     scene.name,
+			Name:     scene.Name,
 			Duration: duration,
 		}
 	}
 
 	return config.Playlist{
-		Name:            playlist.name,
+		Name:            playlist.Name,
 		Scenes:          scenes,
-		DefaultDuration: playlist.defaultDuration.String(),
+		DefaultDuration: playlist.DefaultDuration.String(),
 	}
 }
 

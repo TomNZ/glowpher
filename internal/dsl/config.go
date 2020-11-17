@@ -9,23 +9,23 @@ import (
 )
 
 type Config struct {
-	variables map[string]variable.Variable
-	scenes    map[string]*Scene
-	playlists map[string]*Playlist
+	Variables map[string]variable.Variable
+	Scenes    map[string]*Scene
+	Playlists map[string]*Playlist
 }
 
 type Playlist struct {
-	name            string
-	scenes          []PlaylistScene
-	defaultDuration time.Duration
+	Name            string
+	Scenes          []PlaylistScene
+	DefaultDuration time.Duration
 }
 
 type PlaylistScene struct {
-	name     string
-	duration time.Duration
+	Name     string
+	Duration time.Duration
 }
 
 type Scene struct {
-	name    string
-	effects []effect.Effect
+	Name    string
+	Effects []effect.Effect
 }

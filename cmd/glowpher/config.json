@@ -1,25 +1,35 @@
 {
-    "playlist": {
-        "scenes": [
-            {
-                "name": "Christmas!",
-                "effects": [
-                    {
-                        "type": "brightness",
-                        "params": {
+    "scenes": [
+        {
+            "name": "christmas",
+            "effects": [
+                {
+                    "type": "solid",
+                    "params": {
+                        "color": {
+                            "type": "color",
                             "value": {
-                                "type": "float",
-                                "value": {
-                                    "float": 0.5
+                                "color": {
+                                    "r": 1.0,
+                                    "g": 0.0,
+                                    "b": 0.0
                                 }
                             }
                         }
                     }
-                ]
-            }
-        ],
-        "defaultDuration": "30s"
-    },
+                }
+            ]
+        }
+    ],
+    "playlists": [
+        {
+            "name": "Christmas!",
+            "scenes": [
+                {"name":  "christmas"}
+            ],
+            "defaultDuration": "30s"
+        }
+    ],
     "variables": [
         {
             "name": "Random 1",

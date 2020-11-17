@@ -10,6 +10,6 @@ type API struct {
 // Config defines the current Glowpher configuration.
 type Config struct {
 	Scenes    []Scene    `json:"scenes"`
-	Playlists []Playlist `json:"dsl"`
+	Playlists []Playlist `json:"playlists"`
 	Variables []Variable `json:"variables"`
 }
