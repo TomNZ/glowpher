@@ -1,5 +1,4 @@
-# Based on the *slim* Go 1.x image
-FROM resin/%%RESIN_MACHINE_NAME%%-golang:1-slim
+FROM balenalib/%%RESIN_MACHINE_NAME%%-golang
 
 RUN apt-get update && apt-get install -yq \
   build-essential git scons && \

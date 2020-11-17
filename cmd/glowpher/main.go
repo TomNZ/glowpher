@@ -2,14 +2,16 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/k0kubun/pp"
-	"github.com/tomnz/glowpher/config"
-	"github.com/tomnz/glowpher/internal/devices"
-	"github.com/tomnz/glowpher/internal/playlist"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/k0kubun/pp"
+	"github.com/tomnz/glowpher/config"
+	"github.com/tomnz/glowpher/internal/devices"
+	"github.com/tomnz/glowpher/internal/dsl"
 )
 
 const pixels = 52
@@ -23,25 +25,26 @@ func main() {
 	}
 
 	if err := json.Unmarshal(configFile, &cfg); err != nil {
-		log.Fatalf("couldn't read config: %s", err)
+		log.Fatalf("couldn't read dsl: %s", err)
 	}
 
 	pp.Print(cfg)
-	println()
-	println()
+	fmt.Println()
+	fmt.Println()
 
-	pl, err := playlist.Compile(cfg)
+	pl, err := dsl.Compile(cfg)
 	if err != nil {
-		log.Fatalf("couldn't compile playlist: %s", err)
+		log.Fatalf("couldn't compile dsl: %s", err)
 	}
 
 	pp.Print(pl)
-	println()
-	println()
+	fmt.Println()
+	fmt.Println()
 
-	cfgApi := playlist.Decompile(pl)
+	cfgApi := dsl.Decompile(pl)
 
 	pp.Print(cfgApi)
+	fmt.Println()
 
 	dev := devices.Registry["ws281x"]
 	dev.Setup(pixels)

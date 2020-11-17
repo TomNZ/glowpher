@@ -4,11 +4,12 @@ package config
 type API struct {
 	EffectOptions   []EffectOption   `json:"effectOptions"`
 	VariableOptions []VariableOption `json:"variableOptions"`
-	Config          Config           `json:"config"`
+	Config          Config           `json:"dsl"`
 }
 
 // Config defines the current Glowpher configuration.
 type Config struct {
-	Playlist  Playlist   `json:"playlist"`
+	Scenes    []Scene    `json:"scenes"`
+	Playlists []Playlist `json:"dsl"`
 	Variables []Variable `json:"variables"`
 }

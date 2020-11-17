@@ -1,7 +1,9 @@
-package playlist
+package dsl
 
 import (
 	"fmt"
+	"sort"
+
 	"github.com/tomnz/glowpher/config"
 	"github.com/tomnz/glowpher/internal/color"
 	"github.com/tomnz/glowpher/internal/effect"
@@ -9,7 +11,7 @@ import (
 )
 
 // Decompile builds the API response from the current Glowpher configuration.
-func Decompile(playlist *Playlist) *config.API {
+func Decompile(cfg *Config) *config.API {
 	api := &config.API{}
 
 	// Build options
@@ -34,9 +36,9 @@ func Decompile(playlist *Playlist) *config.API {
 	}
 
 	// Build variables
-	vars := make([]config.Variable, len(playlist.variables))
+	vars := make([]config.Variable, len(cfg.variables))
 	idx = 0
-	for name, vari := range playlist.variables {
+	for name, vari := range cfg.variables {
 		vars[idx] = config.Variable{
 			Name:   name,
 			Type:   vari.Type(),
@@ -46,15 +48,29 @@ func Decompile(playlist *Playlist) *config.API {
 	}
 	api.Config.Variables = vars
 
-	// Build playlist
-	scenes := make([]config.Scene, len(playlist.scenes))
-	for idx := range scenes {
-		scenes[idx] = decompileScene(playlist.scenes[idx])
+	// Build scenes
+	scenes := make([]config.Scene, len(cfg.scenes))
+	idx = 0
+	for _, scene := range cfg.scenes {
+		scenes[idx] = decompileScene(scene)
+		idx++
 	}
-	api.Config.Playlist = config.Playlist{
-		Scenes:          scenes,
-		DefaultDuration: playlist.defaultDuration.String(),
+	sort.Slice(scenes, func(i, j int) bool {
+		return scenes[i].Name < scenes[j].Name
+	})
+	api.Config.Scenes = scenes
+
+	// Build playlists
+	playlists := make([]config.Playlist, len(cfg.playlists))
+	idx = 0
+	for _, playlist := range cfg.playlists {
+		playlists[idx] = decompilePlaylist(playlist)
+		idx++
 	}
+	sort.Slice(playlists, func(i, j int) bool {
+		return playlists[i].Name < playlists[j].Name
+	})
+	api.Config.Playlists = playlists
 
 	return api
 }
@@ -139,16 +155,9 @@ func decompileScene(scene *Scene) config.Scene {
 		effects[idx] = decompileEffect(scene.effects[idx])
 	}
 
-	var duration *string
-	if scene.duration != 0 {
-		durationStr := scene.duration.String()
-		duration = &durationStr
-	}
-
 	return config.Scene{
-		Name:     scene.name,
-		Effects:  effects,
-		Duration: duration,
+		Name:    scene.name,
+		Effects: effects,
 	}
 }
 
@@ -156,6 +165,28 @@ func decompileEffect(eff effect.Effect) config.SceneEffect {
 	return config.SceneEffect{
 		Type:   eff.Type(),
 		Params: decompileParams(eff.Params()),
+	}
+}
+
+func decompilePlaylist(playlist *Playlist) config.Playlist {
+	scenes := make([]config.PlaylistScene, len(playlist.scenes))
+	for idx, scene := range playlist.scenes {
+		var duration *string
+		if scene.duration != 0 {
+			durationStr := scene.duration.String()
+			duration = &durationStr
+		}
+
+		scenes[idx] = config.PlaylistScene{
+			Name:     scene.name,
+			Duration: duration,
+		}
+	}
+
+	return config.Playlist{
+		Name:            playlist.name,
+		Scenes:          scenes,
+		DefaultDuration: playlist.defaultDuration.String(),
 	}
 }
 
