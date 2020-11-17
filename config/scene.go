@@ -2,9 +2,8 @@ package config
 
 // Scene declares an overall animated configuration.
 type Scene struct {
-	Name     string
-	Effects  []SceneEffect `json:"effects"`
-	Duration *string       `json:"duration,omitempty"`
+	Name    string
+	Effects []SceneEffect `json:"effects"`
 }
 
 // SceneEffect declares the type and parameters of a given effect instance in

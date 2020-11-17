@@ -1,4 +1,4 @@
-package playlist
+package dsl
 
 import (
 	"fmt"
@@ -9,8 +9,8 @@ import (
 	"github.com/tomnz/glowpher/internal/variable"
 )
 
-// Compile compiles the given configuration into a playlist.
-func Compile(cfg config.Config) (*Playlist, error) {
+// Compile compiles the given configuration into a dsl.
+func Compile(cfg config.Config) (*Config, error) {
 	variables := map[string]variable.Variable{}
 	for _, cfgVariable := range cfg.Variables {
 		vari, err := compileVariable(cfgVariable)
@@ -26,24 +26,28 @@ func Compile(cfg config.Config) (*Playlist, error) {
 		}
 	}
 
-	scenes := make([]*Scene, len(cfg.Playlist.Scenes))
-	for idx, cfgScene := range cfg.Playlist.Scenes {
+	scenes := make(map[string]*Scene, len(cfg.Scenes))
+	for _, cfgScene := range cfg.Scenes {
 		scene, err := compileScene(cfgScene, variables)
 		if err != nil {
 			return nil, err
 		}
-		scenes[idx] = scene
+		scenes[scene.name] = scene
 	}
 
-	defaultDuration, err := compileDuration(&cfg.Playlist.DefaultDuration)
-	if err != nil {
-		return nil, fmt.Errorf("playlist default duration %q: %s", cfg.Playlist.DefaultDuration, err)
+	playlists := make(map[string]*Playlist, len(cfg.Playlists))
+	for _, cfgPlaylist := range cfg.Playlists {
+		playlist, err := compilePlaylist(cfgPlaylist, scenes)
+		if err != nil {
+			return nil, err
+		}
+		playlists[cfgPlaylist.Name] = playlist
 	}
 
-	return &Playlist{
-		scenes:          scenes,
-		variables:       variables,
-		defaultDuration: defaultDuration,
+	return &Config{
+		scenes:    scenes,
+		variables: variables,
+		playlists: playlists,
 	}, nil
 }
 
@@ -161,15 +165,38 @@ func compileScene(cfg config.Scene, variables map[string]variable.Variable) (*Sc
 		effects[idx] = eff
 	}
 
-	duration, err := compileDuration(cfg.Duration)
+	return &Scene{
+		name:    cfg.Name,
+		effects: effects,
+	}, nil
+}
+
+func compilePlaylist(cfg config.Playlist, scenes map[string]*Scene) (*Playlist, error) {
+	defaultDuration, err := compileDuration(&cfg.DefaultDuration)
 	if err != nil {
-		return nil, fmt.Errorf("scene %q: %s", cfg.Name, err)
+		return nil, fmt.Errorf("dsl %q has default duration %q: %s", cfg.DefaultDuration, err)
 	}
 
-	return &Scene{
-		name:     cfg.Name,
-		effects:  effects,
-		duration: duration,
+	playlistScenes := make([]PlaylistScene, len(cfg.Scenes))
+	for idx, cfgScene := range cfg.Scenes {
+		if _, ok := scenes[cfgScene.Name]; !ok {
+			return nil, fmt.Errorf("dsl %q references invalid scene %q", cfg.Name, cfgScene.Name)
+		}
+
+		duration, err := compileDuration(cfgScene.Duration)
+		if err != nil {
+			return nil, fmt.Errorf("dsl %q scene %q has invalid duration %q: %s", cfg.Name, cfgScene.Name, cfgScene.Duration, err)
+		}
+
+		playlistScenes[idx] = PlaylistScene{
+			name:     cfgScene.Name,
+			duration: duration,
+		}
+	}
+
+	return &Playlist{
+		scenes:          playlistScenes,
+		defaultDuration: defaultDuration,
 	}, nil
 }
 
@@ -180,6 +207,7 @@ func compileDuration(cfg *string) (time.Duration, error) {
 	var duration time.Duration
 	return duration, nil
 }
+
 func compileEffect(cfg config.SceneEffect, variables map[string]variable.Variable) (effect.Effect, error) {
 	eff, ok := effect.Registry[cfg.Type]
 	if !ok {
