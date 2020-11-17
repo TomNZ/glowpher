@@ -4,7 +4,7 @@ package rpiws281x
 
 /*
 #cgo CFLAGS: -std=c99
-#cgo LDFLAGS: -lws2811
+#cgo LDFLAGS: -lws2811 -lm
 #include "rpiws281x.go.h"
 */
 import "C"
