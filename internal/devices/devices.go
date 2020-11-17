@@ -1,6 +1,6 @@
 package devices
 
-import "image/color"
+import "github.com/tomnz/glowpher/internal/color"
 
 type Device interface {
 	Setup(int) error

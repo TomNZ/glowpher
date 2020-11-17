@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math/rand"
-	"time"
+
+	"github.com/tomnz/glowpher/internal/player"
 
 	"github.com/k0kubun/pp"
 	"github.com/tomnz/glowpher/config"
@@ -32,16 +32,16 @@ func main() {
 	fmt.Println()
 	fmt.Println()
 
-	pl, err := dsl.Compile(cfg)
+	dslPl, err := dsl.Compile(cfg)
 	if err != nil {
 		log.Fatalf("couldn't compile dsl: %s", err)
 	}
 
-	pp.Print(pl)
+	pp.Print(dslPl)
 	fmt.Println()
 	fmt.Println()
 
-	cfgApi := dsl.Decompile(pl)
+	cfgApi := dsl.Decompile(dslPl)
 
 	pp.Print(cfgApi)
 	fmt.Println()
@@ -49,13 +49,7 @@ func main() {
 	dev := devices.Registry["ws281x"]
 	dev.Setup(pixels)
 
-	colors := make([]uint32, pixels)
-
 	for {
-		for idx := range colors {
-			colors[idx] = rand.Uint32()
-		}
-		dev.ShowColors(colors)
-		time.Sleep(time.Millisecond * 500)
+		player.Play(dslPl.Playlists["Christmas!"], dslPl.Scenes, dev, player.WithNumLeds(pixels))
 	}
 }
