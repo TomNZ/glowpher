@@ -1,8 +1,10 @@
 package devices
 
+import "image/color"
+
 type Device interface {
 	Setup(int) error
-	ShowColors([]uint32) error
+	ShowColors([]color.Color) error
 	Clear() error
 	Teardown()
 }
