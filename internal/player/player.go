@@ -17,12 +17,15 @@ func Play(playlist *dsl.Playlist, scenes map[string]*dsl.Scene, device devices.D
 
 	maxFrameDuration := time.Second / time.Duration(cfg.maxFramerate)
 
+	frameDuration := maxFrameDuration
 	scene := scenes[playlist.Scenes[0].Name]
 	for {
 		start := time.Now()
 		colors := make([]color.Color, cfg.numLeds)
 		for _, effect := range scene.Effects {
-
+			effect.Step(frameDuration, colors)
 		}
+		_ = device.ShowColors(colors)
+		frameDuration = time.Now().Sub(start)
 	}
 }
